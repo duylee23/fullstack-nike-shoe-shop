@@ -1,25 +1,33 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { IoTimeSharp } from 'react-icons/io5'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 const ProductList = () => {
     const [products, setProducts] = useState([])
-  useEffect(() => {
-    const fetchData = async () => {
-      try{
-        const res = await axios.get(`http://localhost:8080`)
-        setProducts(res.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    fetchData()
-  }, [])
+    const location = useLocation();
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try{
+//         const res = await axios.get(`http://localhost:8080`)
+//         setProducts(res.data)
+//       } catch (error) {
+//         console.log(error)
+//       }
+//     }
+//     fetchData()
+//   }, [])
+
+
   return (
-    <div className='flex-auto w-full border h-full border'>
-        {/* table */}
+    <div className='flex flex-col w-full h-full'>
+        <div className='w-full flex items-center justify-between'>
+            <Link to="/admin/product/new-product" className='border-[#ff6501] hover:bg-bgOrange hover:text-white rounded-lg cursor-pointer border py-4 px-8 rounded-lg'>
+              Add new
+            </Link>
+        </div>
+         {/* table */}
        
-            <table class="w-full text-sm text-left rtl:text-right">
+         <table class="w-full text-sm text-left rtl:text-right">
                 <thead class="text-xs text-black-700 uppercase ">
                     <tr><th scope="col" class="px-6 py-3">
                             Id

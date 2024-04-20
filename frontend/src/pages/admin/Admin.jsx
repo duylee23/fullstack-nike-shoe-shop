@@ -6,8 +6,7 @@ const Admin = () => {
   return (
 
     <div className=' mt-20 min-h-screen flex'>
-      admin
-      <SideBarLeft/>
+      <SideBarLeft/> 
       <Outlet/>
     </div>
   )

@@ -8,6 +8,9 @@ module.exports = {
       },
       textColor: {
         textOrange: '#ff6501',
+      },
+      borderColor:{
+        borderOrange: '#ff6501',
       }
     },
   },
