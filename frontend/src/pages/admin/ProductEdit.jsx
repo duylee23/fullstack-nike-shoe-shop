@@ -1,6 +1,31 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+
+
 const ProductEdit = () => {
+    const {productId} = useParams();
+    const [product, setProduct] = useState({
+        'name': '',
+        'price': '',
+        'description': '',
+        'quantity': '',
+        'image': '',
+    })
+    useEffect(() => {
+        const fetchAProduct = async() => {
+            try{
+                const res = await axios.get(`http://localhost:8080/admin/product/${productId}`);
+                setProduct(res.data)
+                console.log(res.data)
+            } catch (err) {
+                console.error('Error when fetching a product:', err);
+            }
+        }
+        fetchAProduct();
+    }, [productId]);
+
     const handleChangeImage = (e) => {
         const imagePreview = document.getElementById("imagePreview");
         // Check if a file is selected
@@ -13,11 +38,42 @@ const ProductEdit = () => {
                 imagePreview.setAttribute("src", imgURL);
                 imagePreview.style.display = "block";
             }
-        } else {
-            // If no file is selected, hide the image preview
-            imagePreview.removeAttribute("src");
-            imagePreview.style.display = "none";
         }
+    }
+
+    const handleSubmitEdit = async (event) => {
+        event.preventDefault();
+        try {
+            // Check if productId is defined and valid
+            if (!productId) {
+                console.error('Product ID is not defined.');
+                return;
+            }
+    
+            const formData = new FormData();
+            formData.append('name', product.name);
+            formData.append('description', product.description);
+            formData.append('quantity', product.quantity);
+            formData.append('price', parseFloat(product.price));
+            formData.append('filee', product.image); // Ensure product.image contains the file object
+    
+            const response = await axios.post(`http://localhost:8080/admin/product/update/${productId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+    
+            console.log(formData);
+            console.log(response.data);
+            alert('Product updated successfully!');
+        } catch (error) {
+            console.error('Error updating product:', error);
+            alert('Failed to update product. Please try again later.');
+        }
+    }
+
+    const handleInput = (event) => {
+        setProduct({...product, [event.target.name] : event.target.value})
     }
 
   return (
@@ -27,56 +83,50 @@ const ProductEdit = () => {
                   Go back
               </Link>
           </div>
-            {/* form start */}
-            <h2 className='text-center mt-4 font-bold text-textOrange'>EDIT PRODUCT</h2>
+            <h2 className='text-center my-8 font-bold text-textOrange'>EDIT PRODUCT</h2>
 
-          <form className="w-[70%] mx-auto">
-             <div className="grid md:grid-cols-2 md:gap-6">
-                  <div className="relative z-0 w-full mb-5 group">
-                      <input type="text" name="floating_first_name" id="floating_first_name" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                      <label htmlFor="floating_first_name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product name</label>
+        {/* form start */}
+          <form className="w-[70%] mx-auto" onSubmit={handleSubmitEdit}>
+              <div className=' flex justify-around gap-4'>
+                  <div className='flex-1'>
+                      <label htmlFor="small-input" className="block mb-2 text-sm font-medium text-gray-900 ">Product name</label>
+                      <input type="text" name='name' id="small-input" onChange={(event) => handleInput(event)} value={product.name} className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 " />
                   </div>
-                  <div className="relative z-0 w-full mb-5 group">
-                      <input type="text" name="floating_last_name" id="floating_last_name" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                      <label htmlFor="floating_last_name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product price</label>
-                  </div>
-              </div>
-            
-              <div className="grid md:grid-cols-2 md:gap-6">
-                  <div className="relative z-0 w-full mb-5 group">
-                      <input type="text" name="floating_first_name" id="floating_first_name" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                      <label htmlFor="floating_first_name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product size</label>
-                  </div>
-                  <div className="relative z-0 w-full mb-5 group">
-                      <input type="text" name="floating_last_name" id="floating_last_name" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                      <label htmlFor="floating_last_name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product category</label>
+                  <div className='flex-1'>
+                      <label htmlFor="small-input" className="block mb-2 text-sm font-medium text-gray-900 ">Product price</label>
+                      <input type="text" id="small-input" onChange={(event) => handleInput(event) } value={product.price} className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 " />
                   </div>
               </div>
-              <div className="grid md:grid-cols-2 md:gap-6">
-                  <div className="relative z-0 w-full mb-5 group">
-                      <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" name="floating_phone" id="floating_phone" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                      <label htmlFor="floating_phone" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product description</label>
-                  </div>
-                  <div className="relative z-0 w-full mb-5 group">
-                      <input type="text" name="floating_company" id="floating_company" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                      <label htmlFor="floating_company" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Quantity</label>
-                  </div>
+              <div className='flex justify-around gap-4'>
+                {/* <div className='flex-1'>
+                    <label htmlFor="small-input" className="block mb-2 text-sm font-medium text-gray-900 ">Product size</label>
+                    <input type="text" id="small-input" onChange={(event) => handleInput(event) } value={product.sizes?.map(size => size.sizeNumber)} className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 " />
+                </div> */}
+                <div className="mb-5 flex-1">
+                    <label htmlFor="base-input" className="block mb-2 text-sm font-medium text-gray-900 ">Product quantity</label>
+                    <input type="text" id="base-input" onChange={(event) => handleInput(event) } value={product.quantity} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " />
+                </div>
               </div>
-
-              <div className="relative z-0 w-[20%] mb-5 group">
-                  <input onChange={(e) => handleChangeImage(e)} type="file" name="floating_password" id="imageFile" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" accept='.png, .jpg, .jpeg' />
-                  <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product image</label>
+              <div className="mb-5">
+                  <label htmlFor="large-input" className="block mb-2 text-sm font-medium text-gray-900 ">Product description</label>
+                  <input type="text" id="large-input"  onChange={(event) => handleInput(event) } value={product.description} className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 " />
               </div>
-              <div className="mb-12">
-                    <img style={{ maxHeight: '250px', display: 'none' }} alt="avatar preview"
-                        id="imagePreview" />
-             </div>
-              <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+              <div className='w-[50%]'>
+                  <label htmlFor="small-input" className="block mb-2 text-sm font-medium text-gray-900 ">Product image</label>
+                  <input type="file" onChange={(e) => handleChangeImage(e)} name="filee" id="filee" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 " accept='.png, .jpg, .jpeg'/>
+              </div>
+              {/* Image preview */}
+              <div className="mb-12 ">
+                  <img style={{ maxHeight: '250px' }} name='filee' alt="avatar preview" id="imagePreview" src={`http://localhost:8080/admin/product/image/${product.image}`} />
+              </div>
+              {/* Submit button */}
+              <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                  Submit
+              </button>
           </form>
-          {/* form end */}
-
+        {/* form end */}
       </div>
-  )
+ ) 
 }
 
 export default ProductEdit

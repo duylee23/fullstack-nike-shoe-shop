@@ -82,13 +82,13 @@ import { Link, Outlet, useLocation } from 'react-router-dom'
                                     {item.name}
                                 </th>
                                 <td className="px-6 py-4">
-                                    <img className='w-[100px] h-[100px] object-contain border' src={item.image}></img>
+                                    <img className='w-[100px] h-[100px] object-contain border' src={`http://localhost:8080/admin/product/image/${item.image}`} alt="Product" />
                                 </td>
                                 <td className="px-6 py-4">
                                     {item.sizes?.map(size => size.sizeNumber).join(', ')}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {item.price}
+                                    {item.price} 
                                 </td>
                                 <td className="px-6 py-4">
                                     {item.sold}
@@ -97,7 +97,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom'
                                     {item.quantity}
                                 </td>
                                 <td className=" py-4">
-                                    <Link to="/admin/product/edit" className=' border px-4 py-2 rounded-lg mr-4 border-blue-500 hover:bg-blue-500 hover:text-white'>Edit</Link>
+                                    <Link to={`/admin/product/edit/${item.id}`} className=' border px-4 py-2 rounded-lg mr-4 border-blue-500 hover:bg-blue-500 hover:text-white'>Edit</Link>
                                     <Link className='border px-4 py-2 rounded-lg border-red-500 hover:bg-red-500 hover:text-white' onClick={() => handleDeleteProduct(item.id)}>Delete</Link>
                                 </td>
                             </tr>
