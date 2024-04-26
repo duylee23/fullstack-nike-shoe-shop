@@ -1,6 +1,6 @@
 import path from "./utils/paths"
 import { Routes, Route, useParams } from "react-router-dom";
-import {Home, Admin, NewProduct, ProductList, ProductAdd, ProductEdit} from "./pages"
+import {Home, Admin, NewProduct, ProductList, ProductAdd, ProductEdit, ProductsShow, Popular, Login, Register} from "./pages"
 import { Header, Footer, OrderList } from './components';
 function App() {
 
@@ -15,6 +15,11 @@ function App() {
           <Route path="product/edit/:productId" element={<ProductEdit/>}/>
           <Route path="order" element={<OrderList />} /> 
         </Route>
+        <Route path="/user/products" element={<ProductsShow/>}/>
+        <Route path="/user/popular" element={<Popular/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/register" element={<Register/>}/>
+
       </Routes>
       <Footer/>
     </div>

@@ -27,3 +27,23 @@ export const sideBarMenu = [
         icon: <FaDoorOpen size={24}/>
     }
 ]
+
+export const navBarMenu = [
+    {
+        path: '',
+        text: 'Home'
+    }, 
+    {
+        path: '/user/products',
+        text: 'Products'
+    }, 
+    {
+        path: '/user/popular',
+        text: 'Popular'
+    }, 
+
+    {
+        path: '/admin',
+        text: 'Admin'
+    }, 
+]

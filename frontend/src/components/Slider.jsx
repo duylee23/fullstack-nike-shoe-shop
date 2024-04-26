@@ -12,7 +12,7 @@ const Slider = () => {
   return (
     <div className='w-full h-[600px] mt-[80px] border'>
     <Swiper
-      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      modules={[Navigation, Pagination, Scrollbar, A11y ]}
       spaceBetween={50}
       slidesPerView={1}
       navigation
