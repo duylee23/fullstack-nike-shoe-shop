@@ -5,17 +5,19 @@ import { useParams } from 'react-router-dom'
 
 
 const ProductEdit = () => {
-    const {productId} = useParams();
+    const { productId } = useParams();
+    const [image, setImage] = useState(null)
     const [product, setProduct] = useState({
-        'name': '',
-        'price': '',
-        'description': '',
-        'quantity': '',
-        'image': '',
+        name: '',
+        price: '',
+        description: '',
+        quantity: '',
+        image: null
     })
+    const [isPreFilling, setIsPreFilling] = useState(false); // Optional flag for pre-filling status
     useEffect(() => {
-        const fetchAProduct = async() => {
-            try{
+        const fetchAProduct = async () => {
+            try {
                 const res = await axios.get(`http://localhost:8080/admin/product/${productId}`);
                 setProduct(res.data)
                 console.log(res.data)
@@ -26,12 +28,38 @@ const ProductEdit = () => {
         fetchAProduct();
     }, [productId]);
 
+    const preFillImage = async () => {
+        if (product && product.image) {
+            setIsPreFilling(true); // Set flag if applicable
+
+            const reader = new FileReader();
+            reader.readAsDataURL(new Blob([], { type: 'image/*' })); // Create an empty blob with appropriate type
+            reader.onload = (event) => {
+                const preFilledFile = new File([event.target.result], `http://localhost:8080/admin/product/image/${product.image}`);
+                setImage(preFilledFile)
+                setIsPreFilling(false); // Reset flag if applicable
+            };
+            reader.onerror = (error) => {
+                console.error('Error pre-filling image:', error);
+                setIsPreFilling(false); // Reset flag if applicable
+            };
+        }
+    };
+
+    useEffect(() => {
+        preFillImage();
+        
+    }, [product]);
+
+  
+
     const handleChangeImage = (e) => {
         const imagePreview = document.getElementById("imagePreview");
         // Check if a file is selected
         if (e.target.files.length > 0) {
             // Create URL for the selected file
             const file = e.target.files[0];
+            setImage(file)
             if (file) {
                 const imgURL = URL.createObjectURL(file);
                 // Set image source and display style
@@ -55,15 +83,13 @@ const ProductEdit = () => {
             formData.append('description', product.description);
             formData.append('quantity', product.quantity);
             formData.append('price', parseFloat(product.price));
-            formData.append('filee', product.image); // Ensure product.image contains the file object
-    
+            formData.append('file', image); // Ensure product.image contains the file object
+            
             const response = await axios.post(`http://localhost:8080/admin/product/update/${productId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
-            });
-    
-            console.log(formData);
+            });    
             console.log(response.data);
             alert('Product updated successfully!');
         } catch (error) {
@@ -113,11 +139,11 @@ const ProductEdit = () => {
               </div>
               <div className='w-[50%]'>
                   <label htmlFor="small-input" className="block mb-2 text-sm font-medium text-gray-900 ">Product image</label>
-                  <input type="file" onChange={(e) => handleChangeImage(e)} name="filee" id="filee" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 " accept='.png, .jpg, .jpeg'/>
+                  <input type="file"  onChange={(e) => handleChangeImage(e)} name="file" id="file" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 " accept='.png, .jpg, .jpeg'/>
               </div>
               {/* Image preview */}
               <div className="mb-12 ">
-                  <img style={{ maxHeight: '250px' }} name='filee' alt="avatar preview" id="imagePreview" src={`http://localhost:8080/admin/product/image/${product.image}`} />
+                  <img style={{ maxHeight: '250px' }}  alt="avatar preview" id="imagePreview" src={`http://localhost:8080/admin/product/image/${product.image}`} />
               </div>
               {/* Submit button */}
               <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
