@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const Login = () => {
   return (
-      <div className='mt-[60px] border bg-red-500 w-full '  style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover' }}>
+      <div className='mt-[60px] border  w-full '  style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover' }}>
           <section class="">
               <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                 <div class="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0 ">
