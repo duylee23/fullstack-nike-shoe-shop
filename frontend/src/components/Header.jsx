@@ -22,7 +22,7 @@ const Header = () => {
            </NavLink>))}
         </div>
 
-        <div className='flex items-center w-[30%] flex gap-4 justify-around font-semibold'>
+        <div className='flex items-center w-[30%] flex gap-4 justify-center'>
           <SearchBar/>
           <NavLink to='/login' className={({ isActive }) => (isActive ? activeStyle : notActiveStyle)}>Login</NavLink>
           <NavLink to='/register' className={({ isActive }) => (isActive ? activeStyle : notActiveStyle)}>Register</NavLink>
