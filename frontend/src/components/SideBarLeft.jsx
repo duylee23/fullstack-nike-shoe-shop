@@ -1,6 +1,5 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import UserList from './UserList'
 import { sideBarMenu } from '../utils/menu'
 
 const NavBar = () => {
