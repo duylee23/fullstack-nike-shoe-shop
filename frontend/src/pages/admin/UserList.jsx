@@ -1,160 +1,78 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useState } from 'react'
 
 const UserList = () => {
+    const [userList, setUserlist] = useState([])
+    useState(() => {
+        const getUserList = async () => {
+            try{
+                const res = await axios.get('http://localhost:8080/admin/user')
+                setUserlist(res.data)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        getUserList();
+    }, [])
+    console.log(userList)
     return (
         <div className='flex-auto w-full border h-full border'>
             {/* table */}
-                <table class="w-full text-sm text-left rtl:text-right">
-                    <thead class="text-xs text-black-700 uppercase ">
-                        <tr><th scope="col" class="px-6 py-3">
+                <table className="w-full text-sm text-left rtl:text-right">
+                    <thead className="text-xs text-black-700 uppercase ">
+                        <tr><th scope="col" className="px-6 py-3">
                                 Id
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 User name
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Image
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Email
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Phone number
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Address
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Role
                             </th>
                         </tr>
                     </thead>
                     {/* body */}
                     <tbody>
-                        <tr class="bg-white border-b ">
-                            <td class="px-6 py-4">
-                                1
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                Le Duy Ninh
-                            </th>
-                            <td class="px-6 py-4">
-                                <img className='w-[100px] h-[100px] object-contain border'
-                                 src='https://i.pinimg.com/736x/00/48/2e/00482ee4c3d076360699efcfc53036ce.jpg'></img>
-                            </td>
-                            <td class="px-6 py-4">
-                                coobedangyeuu@gmail.com
-                            </td>
-                            <td class="px-6 py-4">
-                                0352846368
-                            </td>
-                            <td class="px-6 py-4">
-                                Ha Nam
-                            </td>
-                            <td class="px-6 py-4">
-                                ADMIN
-                            </td>
-                        </tr>
+                        {userList?.map((item, index) => (
+                            <tr className="bg-white border-b " key={index}>
+                                <td className="px-6 py-4">
+                                    {item.id}
+                                </td>
+                                <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap">
+                                    {item.fullName}
+                                </th>
+                                <td className="px-6 py-4">
+                                    <img className='w-[100px] h-[100px] object-contain border'
+                                    src='https://i.pinimg.com/736x/00/48/2e/00482ee4c3d076360699efcfc53036ce.jpg'></img>
+                                </td>
+                                <td className="px-6 py-4">
+                                    {item.email}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {item.phoneNumber}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {item.address}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {item.role?.name}
+                                </td>
+                            </tr>
+                        ))}
 
-                        <tr class="bg-white border-b ">
-                            <td class="px-6 py-4">
-                                1
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                Le Duy Ninh
-                            </th>
-                            <td class="px-6 py-4">
-                                <img className='w-[100px] h-[100px] object-contain border'
-                                 src='https://i.pinimg.com/736x/00/48/2e/00482ee4c3d076360699efcfc53036ce.jpg'></img>
-                            </td>
-                            <td class="px-6 py-4">
-                                coobedangyeuu@gmail.com
-                            </td>
-                            <td class="px-6 py-4">
-                                0352846368
-                            </td>
-                            <td class="px-6 py-4">
-                                Ha Nam
-                            </td>
-                            <td class="px-6 py-4">
-                                ADMIN
-                            </td>      
-                        </tr>
 
-                        <tr class="bg-white border-b ">
-                            <td class="px-6 py-4">
-                                1
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                Le Duy Ninh
-                            </th>
-                            <td class="px-6 py-4">
-                                <img className='w-[100px] h-[100px] object-contain border'
-                                 src='https://i.pinimg.com/736x/00/48/2e/00482ee4c3d076360699efcfc53036ce.jpg'></img>
-                            </td>
-                            <td class="px-6 py-4">
-                                coobedangyeuu@gmail.com
-                            </td>
-                            <td class="px-6 py-4">
-                                0352846368
-                            </td>
-                            <td class="px-6 py-4">
-                                Ha Nam
-                            </td>
-                            <td class="px-6 py-4">
-                                ADMIN
-                            </td>      
-                        </tr>
-
-                        <tr class="bg-white border-b ">
-                            <td class="px-6 py-4">
-                                1
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                Le Duy Ninh
-                            </th>
-                            <td class="px-6 py-4">
-                                <img className='w-[100px] h-[100px] object-contain border'
-                                 src='https://i.pinimg.com/736x/00/48/2e/00482ee4c3d076360699efcfc53036ce.jpg'></img>
-                            </td>
-                            <td class="px-6 py-4">
-                                coobedangyeuu@gmail.com
-                            </td>
-                            <td class="px-6 py-4">
-                                0352846368
-                            </td>
-                            <td class="px-6 py-4">
-                                Ha Nam
-                            </td>
-                            <td class="px-6 py-4">
-                                ADMIN
-                            </td>      
-                        </tr>
-
-                        <tr class="bg-white border-b ">
-                            <td class="px-6 py-4">
-                                1
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                Le Duy Ninh
-                            </th>
-                            <td class="px-6 py-4">
-                                <img className='w-[100px] h-[100px] object-contain border'
-                                 src='https://i.pinimg.com/736x/00/48/2e/00482ee4c3d076360699efcfc53036ce.jpg'></img>
-                            </td>
-                            <td class="px-6 py-4">
-                                coobedangyeuu@gmail.com
-                            </td>
-                            <td class="px-6 py-4">
-                                0352846368
-                            </td>
-                            <td class="px-6 py-4">
-                                Ha Nam
-                            </td>
-                            <td class="px-6 py-4">
-                                ADMIN
-                            </td>      
-                        </tr>
                     </tbody>
                 </table>
             {/* end table */}

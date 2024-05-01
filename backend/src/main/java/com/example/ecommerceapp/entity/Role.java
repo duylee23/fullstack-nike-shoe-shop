@@ -1,25 +1,24 @@
-package com.example.ecommerceapp.model;
-
+package com.example.ecommerceapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
+@Table(name = "roles")
 @Getter
 @Setter
-@Table(name = "size")
-public class Size {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private double sizeNumber;
+    private String name;
+    private String description;
+
     @JsonIgnore
-    @ManyToMany(mappedBy = "sizes")
-    private Set<Product> products = new HashSet<>();
+    @OneToMany(mappedBy = "role")
+    private List<User> users;
 }

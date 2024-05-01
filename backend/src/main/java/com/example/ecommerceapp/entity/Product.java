@@ -1,13 +1,11 @@
-package com.example.ecommerceapp.model;
+package com.example.ecommerceapp.entity;
 
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -30,6 +28,5 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "size_id")
     )
-    private Set<Size> sizes = new HashSet<>();
-
+    private List<Size> sizes;
 }
