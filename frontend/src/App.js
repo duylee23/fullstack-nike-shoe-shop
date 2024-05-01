@@ -12,9 +12,9 @@ function App() {
         <Route path="admin" element={<Admin />}>
           <Route path="product" element= {<ProductList/>} />
           <Route path="product/new-product" element={<ProductAdd/>}/>
-          <Route path="user" element={<UserList/>}/>
           <Route path="product/edit/:productId" element={<ProductEdit/>}/>
           <Route path="order" element={<OrderList />} /> 
+          <Route path="user" element={<UserList/>}/>
         </Route>
         <Route path="/user/products" element={<ProductsShow/>}/>
         <Route path="/user/popular" element={<Popular/>}/>
