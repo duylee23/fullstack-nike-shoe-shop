@@ -6,6 +6,7 @@ export {default as Banner} from "./Banner"
 export {default as SideBarLeft} from "./SideBarLeft"
 export {default as OrderList} from "./OrderList"
 export {default as ProductItem} from "./ProductItem"
+export {default as DropDownMenu} from "./DropDownMenu"
 
 
 

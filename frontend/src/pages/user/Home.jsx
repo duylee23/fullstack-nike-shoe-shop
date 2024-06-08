@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 const Home = () => {
   const [data, setData] = useState([])
+  
   useEffect(() => {
     const getProducs = async () => {
       try {
@@ -29,7 +30,7 @@ const Home = () => {
           data?.map((item, index) => (
             <ProductItem
               key={index}
-              data ={item}
+              data={item}
             />
           ))
         }

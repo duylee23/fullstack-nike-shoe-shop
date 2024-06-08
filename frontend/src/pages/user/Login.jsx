@@ -7,8 +7,10 @@ import axios from 'axios';
 import { toast, ToastContainer, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
-
+import { useDispatch} from 'react-redux';
+import { fetchUserCart, setLoggin } from '../../redux/slices/userSlice';
 const Login = () => {
+
     const [loginData, setLoginData] = useState({
         email: '',
         password: ''
@@ -16,10 +18,11 @@ const Login = () => {
     const [userName, setUserName] = useState('')
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const handleToast = () => 
         toast(`Hello ${Cookies.get('username')}, Welcome back!`, {
-          position: "top-right",
+          position: "top-left",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -41,15 +44,21 @@ const Login = () => {
         e.preventDefault();
         try{     
             const res = await axios.post("http://localhost:8080/auth/login", loginData)
+            console.log(res)
             Cookies.set('username', res.data?.user_name)
-            handleToast()
+            Cookies.set('token', res.data?.access_token)
+            Cookies.set('user_email', res.data?.user_email)
+
+            dispatch(setLoggin(true))
+            dispatch(fetchUserCart(res.data.user_email))
             navigate("/")
+            handleToast()
         } catch (error) {
             console.log('Login failed: ', error)
         }
     }
   return (
-      <div className='mt-[60px] border  w-full '  style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover' }}>
+      <div className='mt-[60px] border w-full' style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover' }}>
           <section className="">
               <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                 <div className="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0 ">

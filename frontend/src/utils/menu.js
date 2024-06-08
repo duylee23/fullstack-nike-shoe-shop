@@ -43,7 +43,7 @@ export const navBarMenu = [
     }, 
 
     {
-        path: '/admin',
+        path: '/admin/product',
         text: 'Admin'
     }, 
 ]

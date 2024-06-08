@@ -2,9 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
-
-
+import Cookies from 'js-cookie';
+import ImageData from './ImageData'
 const ProductEdit = () => {
+    const token = Cookies.get('token')
     const { productId } = useParams();
     const [image, setImage] = useState(null)
     const [product, setProduct] = useState({
@@ -12,26 +13,27 @@ const ProductEdit = () => {
         price: '',
         description: '',
         quantity: '',
-        image: null
     })
     const [isPreFilling, setIsPreFilling] = useState(false); // Optional flag for pre-filling status
+
     useEffect(() => {
         const fetchAProduct = async () => {
             try {
-                const res = await axios.get(`http://localhost:8080/admin/product/${productId}`);
+                const res = await axios.get(`http://localhost:8080/admin/product/${productId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                    }
+                });
                 setProduct(res.data)
-                console.log(res.data)
             } catch (err) {
                 console.error('Error when fetching a product:', err);
             }
         }
         fetchAProduct();
     }, [productId]);
-
     const preFillImage = async () => {
         if (product && product.image) {
             setIsPreFilling(true); // Set flag if applicable
-
             const reader = new FileReader();
             reader.readAsDataURL(new Blob([], { type: 'image/*' })); // Create an empty blob with appropriate type
             reader.onload = (event) => {
@@ -48,7 +50,6 @@ const ProductEdit = () => {
 
     useEffect(() => {
         preFillImage();
-        
     }, [product]);
 
   
@@ -77,17 +78,16 @@ const ProductEdit = () => {
                 console.error('Product ID is not defined.');
                 return;
             }
-    
             const formData = new FormData();
             formData.append('name', product.name);
             formData.append('description', product.description);
             formData.append('quantity', product.quantity);
             formData.append('price', parseFloat(product.price));
-            formData.append('file', image); // Ensure product.image contains the file object
             
             const response = await axios.post(`http://localhost:8080/admin/product/update/${productId}`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`                
                 }
             });    
             console.log(response.data);
@@ -142,8 +142,9 @@ const ProductEdit = () => {
                   <input type="file"  onChange={(e) => handleChangeImage(e)} name="file" id="file" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 " accept='.png, .jpg, .jpeg'/>
               </div>
               {/* Image preview */}
-              <div className="mb-12 ">
-                  <img style={{ maxHeight: '250px' }}  alt="avatar preview" id="imagePreview" src={`http://localhost:8080/admin/product/image/${product.image}`} />
+              <div className="mb-12">
+                  {/* {image && <img style={{ maxHeight: '250px' }} alt="avatar preview" id="imagePreview" src={image} />} */}
+                  <ImageData imageName = {product.image} imageType = 'product'/>
               </div>
               {/* Submit button */}
               <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

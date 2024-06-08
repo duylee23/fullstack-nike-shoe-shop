@@ -1,7 +1,7 @@
 import React from 'react'
 import  { useRef, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -12,11 +12,14 @@ const Slider = () => {
   return (
     <div className='w-full h-[600px] mt-[80px] border'>
     <Swiper
-      modules={[Navigation, Pagination, Scrollbar, A11y ]}
+      modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay ]}
       spaceBetween={50}
       slidesPerView={1}
       navigation
-      pagination={{ clickable: true }}
+      autoplay={{ 
+        delay: 3000, // 3 seconds
+        disableOnInteraction: false // Continue autoplay after user interactions
+      }}
       >
         <SwiperSlide>
           <Banner name = "Nike air force 1" 

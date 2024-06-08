@@ -2,15 +2,24 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link, Outlet, useLocation } from 'react-router-dom'
-
+import Cookies from 'js-cookie'
+import ImageData from './ImageData'
+import { fetchUserCart } from '../../redux/slices/userSlice'
+import { useDispatch } from 'react-redux'
     const ProductList = () => {
         const [products, setProducts] = useState([])
         const location = useLocation();
-
+        const token = Cookies.get('token')
+        const user_email = Cookies.get('user_email')
+        const dispatch = useDispatch()
         useEffect(() => {
             const fetchData = async () => {
                 try {
-                    const res = await axios.get(`http://localhost:8080/admin/product`)
+                    const res = await axios.get(`http://localhost:8080/admin/product`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                        }
+                    })
                     setProducts(res.data)
                 } catch (error) {
                     console.log(error)
@@ -20,11 +29,16 @@ import { Link, Outlet, useLocation } from 'react-router-dom'
         }, [])
 
         const handleDeleteProduct = (id) => {
-            axios.delete(`http://localhost:8080/admin/product/delete/${id}`)
+            axios.delete(`http://localhost:8080/admin/product/delete/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                }
+            })
                 .then(response => {
                     if (response.status === 204) {
                         console.log('delete successfully')
                         setProducts(products.filter(product => product.id !== id));
+                        dispatch(fetchUserCart(user_email))
                     } else {
                         throw new Error('failed to delete product')
                     }
@@ -82,13 +96,13 @@ import { Link, Outlet, useLocation } from 'react-router-dom'
                                     {item.name}
                                 </th>
                                 <td className="px-6 py-4">
-                                    <img className='w-[100px] h-[100px] object-contain border' src={`http://localhost:8080/admin/product/image/${item.image}`} alt="Product" />
+                                    <ImageData imageName={item.image} imageType='product'/>
                                 </td>
                                 <td className="px-6 py-4">
                                     {item.sizes?.map(size => size.sizeNumber).join(', ')}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {item.price} 
+                                    $ {item.price} 
                                 </td>
                                 <td className="px-6 py-4">
                                     {item.sold}

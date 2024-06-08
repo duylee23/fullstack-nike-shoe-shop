@@ -1,20 +1,32 @@
 import axios from 'axios'
-import React, { useState } from 'react'
-
+import React, { useState, useEffect } from 'react'
+import Cookies from 'js-cookie'
+import { useDispatch,  useSelector } from 'react-redux'
 const UserList = () => {
-    const [userList, setUserlist] = useState([])
-    useState(() => {
-        const getUserList = async () => {
-            try{
-                const res = await axios.get('http://localhost:8080/admin/user')
-                setUserlist(res.data)
+    // const [userList, setUserlist] = useState([])
+    const token = Cookies.get('token')
+
+    const dispatch = useDispatch();
+    const {loading, error } = useSelector(state => state.users);
+    const[usersList, setUsersList] = useState([])
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+               
+                const res = await axios.get(`http://localhost:8080/admin/user`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                    }
+                })
+                setUsersList(res.data)
+                console.log(res.data)
             } catch (error) {
-                console.error(error)
+                console.log(error)
             }
         }
-        getUserList();
+        fetchData()
     }, [])
-    console.log(userList)
+    
     return (
         <div className='flex-auto w-full border h-full border'>
             {/* table */}
@@ -45,7 +57,7 @@ const UserList = () => {
                     </thead>
                     {/* body */}
                     <tbody>
-                        {userList?.map((item, index) => (
+                        {usersList?.map((item, index) => (
                             <tr className="bg-white border-b " key={index}>
                                 <td className="px-6 py-4">
                                     {item.id}
@@ -67,7 +79,7 @@ const UserList = () => {
                                     {item.address}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {item.role?.name}
+                                    {/* {item.role} */}
                                 </td>
                             </tr>
                         ))}

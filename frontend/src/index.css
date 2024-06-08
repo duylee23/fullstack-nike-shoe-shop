@@ -9,12 +9,23 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  user-select: none; 
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.bg-red-500:checked {
+  background-color: red;
+}
+
+.input {
+  cursor: pointer;
+}
+
 /* input {
   border: none;
   outline: none;
