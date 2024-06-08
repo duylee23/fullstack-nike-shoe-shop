@@ -15,7 +15,9 @@ public class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private double sizeNumber;
+    private long sizeNumber;
+    private long quantity;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "sizes")
     private List<Product> products;

@@ -1,6 +1,7 @@
 package com.example.ecommerceapp.config;
 
 import com.example.ecommerceapp.entity.User;
+import com.example.ecommerceapp.repository.TokenRepository;
 import com.example.ecommerceapp.service.CustomUserDetailsService;
 import com.example.ecommerceapp.service.JwtService;
 import com.example.ecommerceapp.service.UserService;
@@ -25,6 +26,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final CustomUserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(
@@ -40,7 +42,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = jwtService.extractUsername(token);
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if(jwtService.isValid(token, userDetails)){
+            var isTokenValid = tokenRepository.findByToken(token).map(t -> !t.isLoggedOut()).orElse(false);
+            if(jwtService.isValid(token, userDetails) && isTokenValid){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);

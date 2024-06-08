@@ -5,6 +5,8 @@ import com.example.ecommerceapp.entity.Size;
 import com.example.ecommerceapp.service.ProductService;
 import com.example.ecommerceapp.service.SizeService;
 import com.example.ecommerceapp.service.UploadService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.*;
 import org.springframework.http.HttpStatus;
@@ -40,15 +42,29 @@ public class ProductController {
     }
 
     @PostMapping(value = "/product/create")
-    public ResponseEntity<Product> createNewProduct(@ModelAttribute Product product,
+    public ResponseEntity<?> createNewProduct(@ModelAttribute Product product,
                                                     @RequestParam("file") MultipartFile file,
-                                                    @RequestParam("size") String size) {
+                                                    @RequestParam("size")  String sizeJson) {
         try {
             // handle size
-            double sizeNumber = Double.parseDouble(size);
-            Size sizeObject = sizeService.getSizesByNumber(sizeNumber);
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Long> sizeValues = objectMapper.readValue(sizeJson, new TypeReference<Map<String, Long>>() {});
+
+            // Handle size values
             List<Size> sizes = new ArrayList<>();
-            sizes.add(sizeObject);
+            for (Map.Entry<String, Long> entry : sizeValues.entrySet()) {
+                String sizeName = entry.getKey();
+                Long sizeNumber;
+                try {
+                    sizeNumber = Long.parseLong(sizeName);
+                } catch (NumberFormatException e) {
+                    // Handle invalid format for sizeName
+                    return ResponseEntity.badRequest().body("Invalid size number format: " + sizeName);
+                }
+                Size sizeObject = sizeService.getSizesByNumber(sizeNumber);
+                sizeObject.setQuantity(entry.getValue());
+                sizes.add(sizeObject);
+            }
             product.setSizes(sizes);
 
             //handle image

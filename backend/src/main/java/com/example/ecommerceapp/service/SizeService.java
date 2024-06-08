@@ -16,7 +16,7 @@ public class SizeService {
     public List<Size> getAllSize() {
         return this.sizeRepository.findAll();
     }
-    public Size getSizesByNumber(Double sizeNumber) {
+    public Size getSizesByNumber(Long sizeNumber) {
         return this.sizeRepository.findBySizeNumber(sizeNumber);
     }
 }

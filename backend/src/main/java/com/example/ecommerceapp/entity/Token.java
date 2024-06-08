@@ -1,5 +1,6 @@
 package com.example.ecommerceapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ public class Token {
     private String token;
     private boolean loggedOut;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

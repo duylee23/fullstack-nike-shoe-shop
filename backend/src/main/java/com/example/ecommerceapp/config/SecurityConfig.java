@@ -27,10 +27,9 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomLogoutHandler logoutHandler;
     private final String[] PUBLIC_ENDPOINTS = {
-            "/auth/register",
-            "/auth/login",
+            "/auth/**",
             "/user/**",
-            "/logout"
+
     };
 
     @Bean
@@ -40,6 +39,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(e -> e.accessDeniedHandler(accessDeniedHandler)
@@ -48,7 +48,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .logout(l -> l.logoutUrl("/logout")
+                .logout(l -> l.logoutUrl("/auth/logout")
+                        .permitAll()
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
                 )

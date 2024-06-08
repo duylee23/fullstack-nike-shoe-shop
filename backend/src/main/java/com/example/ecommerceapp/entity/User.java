@@ -1,5 +1,6 @@
 package com.example.ecommerceapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,18 +30,26 @@ public class User implements UserDetails{
     private String avatar;
     private String phoneNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
+    @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "user")
+    private Cart cart;
 
-    //UserDetail
+    @OneToMany(mappedBy = "user")
+    List<Order> orders;
+
+
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.getName()));
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

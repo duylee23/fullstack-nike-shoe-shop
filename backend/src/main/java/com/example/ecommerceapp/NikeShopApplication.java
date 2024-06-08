@@ -18,8 +18,9 @@ public class NikeShopApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:3000")
-						.allowedMethods("GET", "POST", "PUT", "DELETE") // Allow these HTTP methods
+				registry.addMapping("/**")
+						.allowedOrigins("http://localhost:3000")
+						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow these HTTP methods
 						.allowedHeaders("*") // Allow all headers
 				   		.allowCredentials(true);
 			}

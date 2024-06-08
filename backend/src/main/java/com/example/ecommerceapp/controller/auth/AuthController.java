@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,4 +34,12 @@ public class AuthController {
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
+
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        // Your logout logic
+        return ResponseEntity.noContent().build();
+    }
+
 }

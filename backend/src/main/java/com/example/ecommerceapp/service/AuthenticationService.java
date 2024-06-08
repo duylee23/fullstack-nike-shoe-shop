@@ -1,6 +1,7 @@
 package com.example.ecommerceapp.service;
 
 import com.example.ecommerceapp.dto.response.AuthenticationResponse;
+import com.example.ecommerceapp.entity.Cart;
 import com.example.ecommerceapp.entity.Role;
 import com.example.ecommerceapp.entity.Token;
 import com.example.ecommerceapp.entity.User;
@@ -11,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.security.sasl.AuthenticationException;
 import java.util.List;
 
 
@@ -28,7 +28,7 @@ public class AuthenticationService {
     public AuthenticationResponse register (User request) {
         // check if user already exist. if exist than authenticate the user
         if(userService.isPresentByEmail(request.getEmail())) {
-            return new AuthenticationResponse(null, "User already exist", null);
+            return new AuthenticationResponse(null, "User already exist", null, null);
         }
 
         User user = new User();
@@ -36,17 +36,16 @@ public class AuthenticationService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         if(request.getRole() == null){
-            Role defaultRole = userService.getRoleByName("USER");
-            user.setRole(defaultRole);
         } else {
             user.setRole(request.getRole());
         }
         userService.createUser(user);
         String jwt = jwtService.generateToken(user);
         saveUserToken(jwt, user);
-         return new AuthenticationResponse(jwt, "User registration successfully", user.getFullName());
+         return new AuthenticationResponse(jwt, "User registration successfully", user.getFullName(), user.getEmail());
     }
 
+    //for login
     public AuthenticationResponse authenticate(User request) throws RuntimeException{
         try {
             authenticationManager.authenticate(
@@ -57,9 +56,9 @@ public class AuthenticationService {
             );
             User user = userService.getUserByEmail(request.getEmail());
             String jwt = jwtService.generateToken(user);
-            saveUserToken(jwt, user);
             revokeAllTokenByUser(user);
-            return new AuthenticationResponse(jwt, "Login successfully! ", user.getFullName());
+            saveUserToken(jwt, user);
+            return new AuthenticationResponse(jwt, "Login successfully! ", user.getFullName(), user.getEmail());
         } catch (Exception e) {
             // Handle failed authentication
             throw new RuntimeException("Invalid credentials", e);

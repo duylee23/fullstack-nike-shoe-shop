@@ -1,6 +1,14 @@
 package com.example.ecommerceapp.controller.client;
 
+import com.example.ecommerceapp.dto.response.CartResponse;
+import com.example.ecommerceapp.entity.Cart;
+import com.example.ecommerceapp.entity.CartDetail;
 import com.example.ecommerceapp.entity.Product;
+import com.example.ecommerceapp.entity.User;
+import com.example.ecommerceapp.repository.CartDetailRepository;
+import com.example.ecommerceapp.repository.CartRepository;
+import com.example.ecommerceapp.service.CartDetailService;
+import com.example.ecommerceapp.service.CartService;
 import com.example.ecommerceapp.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -18,6 +26,9 @@ import java.util.List;
 @RequestMapping("/user")
 public class HomeController {
     private final ProductService productService;
+    private final CartService cartService;
+    private final CartDetailRepository cartDetailRepository;
+    private final CartDetailService cartDetailService;
 
     @GetMapping("/")
     public ResponseEntity<List> getHomePage() {
@@ -56,4 +67,34 @@ public class HomeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/add-product-to-cart/{id}")
+    public ResponseEntity<String> addProductToCart(@PathVariable long id,
+                                                 @RequestParam String email) {
+        this.productService.handleAddProductToCart(email, id);
+        return ResponseEntity.ok("product added to cart");
+    }
+
+    @GetMapping("/cart")
+    public ResponseEntity<CartResponse> getUserCart(@RequestParam String email){
+        Cart cart = this.cartService.getCartByUserEmail(email);
+        List<CartDetail> cartDetail = this.cartDetailRepository.findCartDetailByCart(cart);
+        CartResponse cartResponse = new CartResponse(cart, cartDetail);
+        return new ResponseEntity<>(cartResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping("delete-cart/{id}")
+    public ResponseEntity<?> deleteCartItem(@PathVariable Long id) {
+        this.cartDetailService.deleteCartById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+//    @PostMapping("/place-order")
+//    public ResponseEntity<?> placeOrder(@RequestParam("receiverName") String receiverName,
+//                                        @RequestParam("receiverAddress") String receiverAddress,
+//                                        @RequestParam("receiverPhone") String receiverPhone ) {
+//        User currentUser = new User();
+//    }
+
+
 }

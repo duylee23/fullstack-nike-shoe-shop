@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface TokenRepository extends JpaRepository<Token, Long> {
     @Query("select t from Token t inner join t.user u where t.user.id = :userId and t.loggedOut = false")
     List<Token> findAllTokensByUser(@Param("userId") long userId);
+
     Optional<Token> findByToken(String token);
 
 }

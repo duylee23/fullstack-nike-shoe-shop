@@ -1,6 +1,7 @@
 package com.example.ecommerceapp.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class Product {
     private String name;
     private double price;
     private String image;
+    private String category;
     private String description;
     private long quantity;
     private long sold;
@@ -29,4 +31,12 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "size_id")
     )
     private List<Size> sizes;
+
+    @OneToMany(mappedBy = "product")
+    List<OrderDetail> orderDetails;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product" , cascade = CascadeType.ALL, orphanRemoval = true)
+    List<CartDetail> cartDetails;
+
 }
