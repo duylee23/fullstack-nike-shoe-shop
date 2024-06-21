@@ -99,22 +99,15 @@ public class ProductController {
     }
 
     @PostMapping("/product/update/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @ModelAttribute Product product,
-                                                 @RequestParam("file") MultipartFile file
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @ModelAttribute Product product
                                              ) {
         try{
             Product existingProduct = this.productService.getProductById(id);
             existingProduct.setName(product.getName());
             existingProduct.setPrice(product.getPrice());
+            existingProduct.setCategory(product.getCategory());
             existingProduct.setDescription(product.getDescription());
             existingProduct.setQuantity(product.getQuantity());
-            // Check if a new image file is provided
-                // Handle image upload and update the product's image
-            if (file != null && !file.isEmpty()) {
-                String productImage = this.uploadService.handleSaveUploadFile(file, "productImages");
-                existingProduct.setImage(productImage);
-            }
-
             // Save the updated product to the database
             Product updatedProduct = productService.handleSaveProduct(existingProduct);
             // Return the updated product in the response

@@ -16,7 +16,7 @@ public class CartDetail {
     private long id;
     private long quantity;
     private double price;
-
+    private String size;
 
     //cart_id
     @ManyToOne

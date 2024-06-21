@@ -29,18 +29,18 @@ public class User implements UserDetails{
     private String address;
     private String avatar;
     private String phoneNumber;
-
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Token> tokens;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user")
     private Cart cart;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     List<Order> orders;
 
