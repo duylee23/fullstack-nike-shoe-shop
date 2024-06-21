@@ -1,17 +1,47 @@
-import React from 'react'
+import React, { useState } from 'react'
 import icons from '../../utils/icons'
 import { useSelector } from 'react-redux'
 import banner_image from '../../assets/images/banner2.jpg'
+import axios from 'axios'
 const Purchase = () => {
   const {CiLocationOn} = icons
   const {selectedCartItems} = useSelector(state => state.users)
 
+ 
   const calculateTotalPayment = () => {
     const total = selectedCartItems.reduce((accomulator, item) => {
       return accomulator + item.quantity * item.product.price
     }, 50)
     return total
   }
+
+  const handleOrder = async () => {
+    try{
+      const res = await axios.post(`http://localhost:8080/user/place-order`,order, {
+        params: {
+          email : 'admin@gmail.com',
+        }
+      })
+    } catch (error) {
+      console.log('error when ordering product!')
+    }
+  }
+
+  const [order,setOrder] = useState({
+    receiverName: '',
+    receiverAddress : '',
+    receiverPhone : '', 
+    totalPayment : calculateTotalPayment(),
+    orderDetail: [
+        {
+        quantity: null,
+        price: null,
+        size: '',
+        productId: null
+        },
+      ]
+  })
+
   return (
     <div className='bg-[#f3f3f3] mt-12'>
       <img src={banner_image} className=' mx-auto h-[300px] object-contain'></img>
@@ -62,7 +92,7 @@ const Purchase = () => {
                                     {item.product?.name}
                     </td>
                     <td className="px-6 py-4">
-                      size
+                      {item.size}
                     </td>
                     <td className="px-6 py-4">
                       $ {item.product?.price}
@@ -84,7 +114,7 @@ const Purchase = () => {
             <span>Payment method: Cash on delivery</span>
             <span>Shipping fee: $50</span>
             <span className='text-xl text-textOrange'>Total payment: $ {calculateTotalPayment()} </span>  
-            <button className='p-2 rounded-lg bg-bgOrange font-bold text-white text-lg'>Order</button>
+            <button className='p-2 rounded-lg bg-bgOrange font-bold text-white text-lg' onClick={handleOrder}>Order</button>
           </div>
       </div>
     </div>

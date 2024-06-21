@@ -69,6 +69,9 @@ import { useDispatch } from 'react-redux'
                                 Image
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                Category
+                            </th>
+                            <th scope="col" className="px-6 py-3">
                                 Size
                             </th>
                             <th scope="col" className="px-6 py-3">
@@ -97,6 +100,9 @@ import { useDispatch } from 'react-redux'
                                 </th>
                                 <td className="px-6 py-4">
                                     <ImageData imageName={item.image} imageType='product'/>
+                                </td>
+                                <td className="px-6 py-4">
+                                    {item.category}
                                 </td>
                                 <td className="px-6 py-4">
                                     {item.sizes?.map(size => size.sizeNumber).join(', ')}

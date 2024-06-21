@@ -134,6 +134,9 @@ const Cart = () => {
                             Product
                         </th>
                         <th scope="col" className="px-6 py-3">
+                            Size
+                        </th>
+                        <th scope="col" className="px-6 py-3">
                             Price
                         </th>
                         <th scope="col" className="px-6 py-3">
@@ -164,6 +167,9 @@ const Cart = () => {
                                     src={`http://localhost:8080/user/product/image/${item.product?.image}`} />
                                 {item.product?.name}
                             </td>
+                            <td className="px-6 py-4 font-semibold">
+                                {item.size}
+                            </td>
                             <td className="px-6 py-4">
                                 $ {item.product?.price}
                             </td>
@@ -178,7 +184,7 @@ const Cart = () => {
                                     <IoIosAddCircleOutline size={40} onClick={() => handleIncreaseQuantity(index)} className='cursor-pointer' />
                                 </div>
                             </td>
-                            <td className="px-6 py-4 text-textOrange bold">
+                            <td className="px-6 py-4 text-textOrange font-semibold">
                                 $ {item.quantity * item.product?.price}
                             </td>
                             <td className="px-6 py-4">

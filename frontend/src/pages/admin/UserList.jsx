@@ -12,7 +12,6 @@ const UserList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-               
                 const res = await axios.get(`http://localhost:8080/admin/user`, {
                     headers: {
                         'Authorization': `Bearer ${token}` // Include the token in the Authorization header
@@ -79,7 +78,7 @@ const UserList = () => {
                                     {item.address}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {/* {item.role} */}
+                                    {item.role}
                                 </td>
                             </tr>
                         ))}

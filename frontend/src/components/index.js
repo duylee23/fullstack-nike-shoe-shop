@@ -7,6 +7,9 @@ export {default as SideBarLeft} from "./SideBarLeft"
 export {default as OrderList} from "./OrderList"
 export {default as ProductItem} from "./ProductItem"
 export {default as DropDownMenu} from "./DropDownMenu"
+export {default as Pagination} from "./Pagination"
+export {default as Modal} from "./Modal"
+
 
 
 

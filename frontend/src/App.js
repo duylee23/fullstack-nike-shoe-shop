@@ -5,7 +5,10 @@ import { Header, Footer, OrderList } from './components';
 import { toast, ToastContainer, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useContext } from "react";
+import {Modal} from './components';
+
 function App() {
+
 
   return (
     <div className="App">
@@ -28,6 +31,8 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
       </Routes>
+      <Modal
+      />
       <Footer/>
     </div>
   );

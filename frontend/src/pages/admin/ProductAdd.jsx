@@ -40,6 +40,7 @@ const ProductAdd = () => {
         name : '',
         price : '',
         description : '',
+        category: '',
         quantity : '',
         size: '',
         image : null,
@@ -56,12 +57,10 @@ const ProductAdd = () => {
             formData.append('name', product.name);
             formData.append('description', product.description);
             formData.append('quantity', sum);
+            formData.append('category', product.category);
             formData.append('size', JSON.stringify(sizeValues));        
             formData.append('price',  parseFloat(product.price));
             formData.append('file', product.image);
-            formData.forEach((value, key) => {
-                console.log(key, value);
-            });
             const response = await axios.post('http://localhost:8080/admin/product/create',formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -109,7 +108,6 @@ const ProductAdd = () => {
         const newSum = Object.values(newSizeValues).reduce((acc, num) => acc + num, 0);
         setSum(newSum);
       };
-      console.log(sizeValues)
       
   return (
       <div className='w-full'>
@@ -130,6 +128,10 @@ const ProductAdd = () => {
                   <div className="relative z-0 w-full mb-5 group">
                       <input type="text" name="price" id="productPrice" onChange={handleInput} className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
                       <label htmlFor="floating_last_name" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product price</label>
+                  </div>
+                  <div className="relative z-0 w-full mb-5 group">
+                      <input type="text" name="category" id="productCategory" onChange={handleInput} className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                      <label htmlFor="floating_last_name" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product category</label>
                   </div>
               </div>
             

@@ -14,10 +14,10 @@ const ProductDetail = () => {
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top of the page
   }, []);
+  
   const handleChooseSize = (size) => {
     setSelectedSize((prevSize) => prevSize === size ? '' : size)
   };
-  console.log(selectedSize)
   const { data } = useSelector(state => state.product)
 
   return (
@@ -35,13 +35,13 @@ const ProductDetail = () => {
             <span className='italic opacity-90'>{data?.description}</span>
             <span className='flex gap-2 font-semibold'>
               {data?.sizes?.map((size, index) => (
-                <span onClick={() => handleChooseSize(size.sizeNumber)} className={` ${selectedSize == size.sizeNumber ? 'bg-bgOrange text-white' : ''} border border-borderOrange rounded-full px-1 cursor-pointer hover:bg-bgOrange hover:text-white`}>
+                <span onClick={() => handleChooseSize(size.sizeNumber)} className={` ${selectedSize === size.sizeNumber ? 'bg-bgOrange text-white' : ''} border border-borderOrange rounded-full px-1 cursor-pointer hover:bg-bgOrange hover:text-white`}>
                   {size.sizeNumber}
                 </span>
               ))}
             </span>
           <div className=' border flex justify-around gap-4 font-semibold text-lg'>
-            <button className='border border-[2px] flex-1 border-borderOrange rounded-lg p-4 hover:bg-bgOrange hover:text-white duraion-300 '>Add to cart</button>
+            <button className='border border-[2px] flex-1 border-borderOrange rounded-lg p-4 hover:bg-bgOrange hover:text-white duraion-300'>Add to cart</button>
             <Link className='border border-[2px] flex-1 border-borderOrange rounded-lg p-4 hover:bg-bgOrange hover:text-white duraion-300 text-center' to="/user/purchase">Buy now</Link>
           </div>
           <span className='italic opacity-80'>Please firstly add the product to your cart if you want to buy a larger quantity.</span>

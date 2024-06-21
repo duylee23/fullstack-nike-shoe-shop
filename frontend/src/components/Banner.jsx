@@ -2,7 +2,7 @@ import React from 'react'
 
 const Banner = ({name, description, image}) => {
   return (
-    <div className=" relative flex flex-col mx-auto lg:flex-row-reverse lg:max-w-5xl lg:mt-12 xl:max-w-6xl ">
+    <div className="  relative flex flex-col mx-auto lg:flex-row-reverse lg:max-w-5xl lg:mt-12 xl:max-w-6xl ">
         <div className="w-full lg:w-1/2 lg:h-auto">
             <img className="h-[500px] w-full object-cover" src={image} alt="Newest Product" />
         </div>
@@ -16,8 +16,7 @@ const Banner = ({name, description, image}) => {
             </p>
             <div className="mt-8">
             <a href="#"
-                className="inline-block w-full text-center text-lg font-medium border-solid border-2 border-gray-600 py-4 px-10 duration-300 hover:bg-[#ff6501] hover:text-[#fff] hover:shadow-md md:w-48">Read
-                More</a>
+                className="inline-block w-full text-center text-lg font-medium border-solid border-2 border-gray-600 py-4 px-10 duration-300 hover:bg-[#ff6501] hover:text-[#fff] hover:shadow-md md:w-48">Find More</a>
             </div>
         </div>
         </div>
