@@ -16,7 +16,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private double totalPrice;
+    private double totalPayment;
     private String receiverName;
     private String receiverAddress;
     private String receiverPhone;
@@ -26,6 +26,5 @@ public class Order {
     private User user;
 
     @OneToMany(mappedBy = "order")
-    List<OrderDetail> orderDetails;
-
+    List<OrderDetail> orderDetail;
 }

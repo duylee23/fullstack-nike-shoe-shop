@@ -32,11 +32,13 @@ public class Product {
     )
     private List<Size> sizes;
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     List<OrderDetail> orderDetails;
+
 
     @JsonIgnore
     @OneToMany(mappedBy = "product" , cascade = CascadeType.ALL, orphanRemoval = true)
     List<CartDetail> cartDetails;
-
 }
